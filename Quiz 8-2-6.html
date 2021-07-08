@@ -6,6 +6,7 @@
 </svg>
 <script>
 async function init() {
+    // Get Data
     const data = await d3.csv('https://flunky.github.io/cars2017.csv')
     // console.log(data)
 
@@ -13,18 +14,15 @@ async function init() {
     const plotPixel = 200
     const plotMargin = (svgCanvas - plotPixel) / 2
 
-    // const arrayOfAverageCityMPG = data.map(function(obj) { return parseInt(obj.AverageCityMPG) })
-    // const arrayOfAverageHighwayMPG = data.map(function(obj) { return parseInt(obj.AverageHighwayMPG) })
-    // console.log(arrayOfAverageCityMPG)
-    // console.log( d3.max(arrayOfAverageCityMPG) )
+    // Scale
     var xScale = d3.scaleLog().domain( [10, 150] ).range([0,plotPixel])
     var yScale = d3.scaleLog().domain( [10, 150] ).range( [plotPixel,0] )
     // console.log(yScale(150))
 
+    // Scatter Plot
     d3.select("svg")
     .append("g")
-    .attr("transform", `translate(${plotMargin},${plotMargin})`)
-    
+    .attr("transform", `translate(${plotMargin},${plotMargin})`)    
     .selectAll("circle")
     .data(data)
     .enter()
@@ -33,6 +31,18 @@ async function init() {
     .attr( "cy", function(d) { return yScale( parseInt(d.AverageHighwayMPG) ) } )
     .attr( "r", function(d) { return 2 + parseInt(d.EngineCylinders) } )
 
+    // X Label
+    d3.select("svg")
+    .append("g")
+    .attr("transform", `translate(${plotMargin},${plotPixel + plotMargin})`)
+    .call( d3.axisBottom(xScale).tickValues([10,20,50,100]).tickFormat( d3.format("~s") ) )
+    
+
+    // Y Label
+    d3.select("svg")
+    .append("g")
+    .attr("transform", `translate(${plotMargin},${plotMargin})`)
+    .call( d3.axisLeft(yScale).tickValues([10,20,50,100]).tickFormat( d3.format("~s") ) )
 }
 </script>
 </body>
