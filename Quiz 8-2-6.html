@@ -6,6 +6,31 @@
 </svg>
 <script>
 async function init() {
+    const data = await d3.csv('https://flunky.github.io/cars2017.csv')
+    // console.log(data)
+
+    const svgCanvas = 300
+    const plotPixel = 200
+    const plotMargin = (svgCanvas - plotPixel) / 2
+
+    const arrayOfAverageCityMPG = data.map(function(obj) { return parseInt(obj.AverageCityMPG) })
+    const arrayOfAverageHighwayMPG = data.map(function(obj) { return parseInt(obj.AverageHighwayMPG) })
+    // console.log(arrayOfAverageCityMPG)
+    // console.log( d3.max(arrayOfAverageCityMPG) )
+    var xScale = d3.scaleLog().domain( [d3.min(arrayOfAverageCityMPG), d3.max(arrayOfAverageCityMPG)] ).range([0,plotPixel])
+    var yScale = d3.scaleLog().domain( [d3.min(arrayOfAverageHighwayMPG), d3.max(arrayOfAverageHighwayMPG)] ).range( [plotPixel,0] )
+
+    d3.select("svg")
+    .append("g")
+    .attr("transform", `translate(${plotMargin},${plotMargin})`)
+    
+    .selectAll("circle")
+    .data(data)
+    .enter()
+    .append("circle")
+    .attr( "cx", 10 )
+    .attr( "cy", 10 )
+    .attr( "r", 2 )
 
 }
 </script>
