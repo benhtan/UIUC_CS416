@@ -13,12 +13,13 @@ async function init() {
     const plotPixel = 200
     const plotMargin = (svgCanvas - plotPixel) / 2
 
-    const arrayOfAverageCityMPG = data.map(function(obj) { return parseInt(obj.AverageCityMPG) })
-    const arrayOfAverageHighwayMPG = data.map(function(obj) { return parseInt(obj.AverageHighwayMPG) })
+    // const arrayOfAverageCityMPG = data.map(function(obj) { return parseInt(obj.AverageCityMPG) })
+    // const arrayOfAverageHighwayMPG = data.map(function(obj) { return parseInt(obj.AverageHighwayMPG) })
     // console.log(arrayOfAverageCityMPG)
     // console.log( d3.max(arrayOfAverageCityMPG) )
-    var xScale = d3.scaleLog().domain( [d3.min(arrayOfAverageCityMPG), d3.max(arrayOfAverageCityMPG)] ).range([0,plotPixel])
-    var yScale = d3.scaleLog().domain( [d3.min(arrayOfAverageHighwayMPG), d3.max(arrayOfAverageHighwayMPG)] ).range( [plotPixel,0] )
+    var xScale = d3.scaleLog().domain( [10, 150] ).range([0,plotPixel])
+    var yScale = d3.scaleLog().domain( [10, 150] ).range( [plotPixel,0] )
+    // console.log(yScale(150))
 
     d3.select("svg")
     .append("g")
@@ -28,9 +29,9 @@ async function init() {
     .data(data)
     .enter()
     .append("circle")
-    .attr( "cx", 10 )
-    .attr( "cy", 10 )
-    .attr( "r", 2 )
+    .attr( "cx", function(d) { return xScale( parseInt(d.AverageCityMPG) ) } )
+    .attr( "cy", function(d) { return yScale( parseInt(d.AverageHighwayMPG) ) } )
+    .attr( "r", function(d) { return 2 + parseInt(d.EngineCylinders) } )
 
 }
 </script>
